@@ -1,9 +1,22 @@
+/**
+ * WARNING.
+ * This code... Its something else...
+ * If quick and dirty had a poste child, this is it!
+ * 
+ * use or read on your own risk.
+ * 
+ * Pinout defined in the code. Got some 220 Ohm resitors on the data pins.
+ * Using Wemos D1 mini.
+ * 
+ * 
+*/
+
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 #include "secrets.h"
-
+//**********  OBS! Create a secrets.h file and copy this in with your values, or change here but don't commit the code then. ********** 
 #ifndef STASSID
 #define STASSID "xxx"
 #define STAPSK  "xxx"
@@ -309,19 +322,27 @@ void animation_COLOR_FOLLOW(){
 }
 
 unsigned int glowval=0;
+int glowup=1;
 void animateleds2(){
   if (aniframe%1!=0){
     return; //run this only each 1 frames (0.2 sec tot)
   }
-  glowval++;
+  
+  glowval+=10*glowup;
 
-  if (glowval>=255){
+  if (glowval>=254){
+    glowup=-1;
+    glowval=255;
+  }else if (glowval<=0){
+    glowup=1;
     glowval=0;
   }
+  //yes, i know the flash bug. But it looks good. Keep for now.
   fill_solid( leds2, NUM_LEDS2, CRGB(glowval, 0, 0));
 }
 
 /// ANIMATION_COLOR_FOLLOW
+// TODO: Make every animation function take the led array as input, so it can be reused for both led strips. This is just stupid. Later med problem.
 void animateleds(){
 
   switch (active_animation)
