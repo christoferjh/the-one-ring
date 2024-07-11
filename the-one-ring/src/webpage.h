@@ -5,7 +5,7 @@ const char webpage[] PROGMEM = R"=====(
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ESP8266 LED Control</title>
+    <title>The one ring LED Control</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,7 +49,7 @@ const char webpage[] PROGMEM = R"=====(
             var brightness = document.getElementById('brightness').value;
             var strip = document.getElementById('strip').value;
             sendRequest('/setbrightness?val=' + brightness + '&strip=' + strip, function(response) {
-                alert(response);
+                showresp(response);
             });
         }
 
@@ -59,7 +59,7 @@ const char webpage[] PROGMEM = R"=====(
             var b = document.getElementById('colorB').value;
             var strip = document.getElementById('strip').value;
             sendRequest('/setcolor?R=' + r + '&G=' + g + '&B=' + b + '&strip=' + strip, function(response) {
-                alert(response);
+                showresp(response);
             });
         }
 
@@ -67,7 +67,7 @@ const char webpage[] PROGMEM = R"=====(
             var animation = document.getElementById('animation').value;
             var strip = document.getElementById('strip').value;
             sendRequest('/setanimation?id=' + animation + '&strip=' + strip, function(response) {
-                alert(response);
+                showresp(response);
             });
         }
 
@@ -75,10 +75,27 @@ const char webpage[] PROGMEM = R"=====(
             var animod = document.getElementById('animod').value;
             var strip = document.getElementById('strip').value;
             sendRequest('/setanimod?val1=' + animod + '&strip=' + strip, function(response) {
-                alert(response);
+                showresp(response);
             });
         }
-
+        function turnOn(index) {
+            
+            sendRequest('/on?strip=' + index, function(response) {
+                showresp(response);
+            });
+        }
+        function turnOff(index) {
+            
+            sendRequest('/off?strip=' + index, function(response) {
+                showresp(response);
+            });
+        }
+        function reboot() {
+            
+            sendRequest('/reboot', function(response) {
+                showresp(response);
+            });
+        }
         function setLED() {
             var strip = document.getElementById('strip').value;
             var ledIndex = document.getElementById('ledIndex').value;
@@ -86,14 +103,21 @@ const char webpage[] PROGMEM = R"=====(
             var g = document.getElementById('ledG').value;
             var b = document.getElementById('ledB').value;
             sendRequest('/setled?strip=' + strip + '&led=' + ledIndex + '&R=' + r + '&G=' + g + '&B=' + b, function(response) {
-                alert(response);
+                showresp(response);
             });
+        }
+        function showresp(text) {
+            var d = new Date();
+            console.log(text);
+            var c=document.getElementById("output");
+            c.innerHTML= d.toLocaleString()+" : "+text+"<br/>" + c.innerHTML;
+            
         }
     </script>
 </head>
 <body>
     <div class="container">
-        <h1>ESP8266 LED Control</h1>
+        <h1>The one ring LED Control</h1>
         <div class="input-group">
             <label for="brightness">Set Brightness (0-255):</label>
             <input type="number" id="brightness" min="0" max="255" />
@@ -134,6 +158,21 @@ const char webpage[] PROGMEM = R"=====(
             <input type="number" id="ledG" min="0" max="255" placeholder="Green" />
             <input type="number" id="ledB" min="0" max="255" placeholder="Blue" />
             <button onclick="setLED()">Set LED</button>
+        </div>
+        <div class="input-group">
+            <label for="onoff">Turn on or off</label>
+            <button onclick="turnOn(-1)">Turn on</button>
+            <button onclick="turnOff(-1)">Turn off</button>
+            <button onclick="turnOn(document.getElementById('strip').value)">Turn on choosen</button>
+            <button onclick="turnOff(document.getElementById('strip').value)">Turn off choosen</button>
+        </div>
+         <div class="input-group">
+            <label for="reboot">Reboot</label>
+            <button onclick="reboot()">Reboot now</button>
+        </div>
+        <div class="input-group">
+            <label for="output">output</label>
+            <div id="output" name="output" rows="4" cols="50"></div>
         </div>
     </div>
 </body>

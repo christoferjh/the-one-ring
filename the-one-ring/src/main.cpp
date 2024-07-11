@@ -369,7 +369,10 @@ void setup() {
             }
             server.send(200, "text/plain", "OK");
     });
-    
+    server.on("/reboot", []() {
+      server.send(200, "text/plain", "OK");
+      ESP.restart();
+    });
     server.on("/off", []() {
         int strip = -1;if (server.hasArg("strip")){  strip = server.arg("strip").toInt();}
         
