@@ -1,5 +1,6 @@
 # the-one-ring
 Animated mega sized the one ring
+![gif4](https://github.com/christoferjh/the-one-ring/assets/18284010/54876285-31c4-4231-8025-8f2eeb2e241b)
 
 ![gif2croped](https://github.com/christoferjh/the-one-ring/assets/18284010/1ff47728-7d2a-474f-bfb9-f73cf370d8e4)
 
